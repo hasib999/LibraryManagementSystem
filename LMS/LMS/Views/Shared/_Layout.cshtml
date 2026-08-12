@@ -3,6 +3,13 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     var appUser = User.Identity?.IsAuthenticated == true ? await UserManager.GetUserAsync(User) : null;
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    string NavLinkClass(string controller, string? action = null) =>
+        string.Equals(controller, currentController, StringComparison.OrdinalIgnoreCase) &&
+        (action is null || string.Equals(action, currentAction, StringComparison.OrdinalIgnoreCase))
+            ? "nav-link active"
+            : "nav-link";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -35,47 +42,56 @@
                 </span>
             </div>
         </nav>
-        <div class="offcanvas-lg offcanvas-start sidebar" tabindex="-1" id="sidebar">
+        <aside class="offcanvas-lg offcanvas-start sidebar" tabindex="-1" id="sidebar" aria-label="Main navigation">
             <div class="offcanvas-header">
-                <h5>
+                <h5 class="offcanvas-title">
+                    <i class="bi bi-book-half me-2"></i>
                     Navigation
                 </h5>
-                <button class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebar">
+                <button class="btn-close btn-close-white" type="button" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Close navigation">
                 </button>
             </div>
             <div class="offcanvas-body d-flex flex-column p-3">
+                <div class="sidebar-heading d-none d-lg-block">
+                    <span class="sidebar-brand-icon"><i class="bi bi-book-half"></i></span>
+                    <div>
+                        <strong>Library</strong>
+                        <small>Management System</small>
+                    </div>
+                </div>
+                <p class="sidebar-label">Main menu</p>
                 <nav class="nav nav-pills flex-column gap-1">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index">
+                    <a class="@NavLinkClass("Home")" asp-controller="Home" asp-action="Index">
                     <i class="bi bi-grid">
                     </i>
                     Dashboard
                     </a>
-                    <a class="nav-link" asp-controller="Books" asp-action="Index">
+                    <a class="@NavLinkClass("Books")" asp-controller="Books" asp-action="Index">
                     <i class="bi bi-book">
                     </i>
                     Books
                     </a>
-                    <a class="nav-link" asp-controller="Members" asp-action="Index">
+                    <a class="@NavLinkClass("Members")" asp-controller="Members" asp-action="Index">
                     <i class="bi bi-people">
                     </i>
                     Members
                     </a>
-                    <a class="nav-link" asp-controller="Issues" asp-action="Create">
+                    <a class="@NavLinkClass("Issues", "Create")" asp-controller="Issues" asp-action="Create">
                     <i class="bi bi-box-arrow-up-right">
                     </i>
                     Issue Book
                     </a>
-                    <a class="nav-link" asp-controller="Returns" asp-action="Index">
+                    <a class="@NavLinkClass("Returns")" asp-controller="Returns" asp-action="Index">
                     <i class="bi bi-box-arrow-in-down-left">
                     </i>
                     Return Book
                     </a>
-                    <a class="nav-link" asp-controller="Issues" asp-action="Index">
+                    <a class="@NavLinkClass("Issues", "Index")" asp-controller="Issues" asp-action="Index">
                     <i class="bi bi-clock-history">
                     </i>
                     Transactions
                     </a>
-                    <a class="nav-link" asp-controller="Reports" asp-action="Index">
+                    <a class="@NavLinkClass("Reports")" asp-controller="Reports" asp-action="Index">
                     <i class="bi bi-bar-chart">
                     </i>
                     Reports
@@ -89,7 +105,7 @@
                     </button>
                 </form>
             </div>
-        </div>
+        </aside>
         <main class="main-content">
             <partial name="_Alert"/>
             @RenderBody()
