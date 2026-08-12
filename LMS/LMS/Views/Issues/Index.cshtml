@@ -1,2 +1,90 @@
-@model IEnumerable<BookIssue>
-@{ViewData["Title"]="Transactions";}<div class="page-heading"><div><h1>Transactions</h1><p>Complete issue and return history</p></div><a asp-action="Create" class="btn btn-primary">Issue Book</a></div><div class="btn-group mb-3">@foreach(var f in new[]{"All","Issued","Returned","Overdue"}){<a asp-route-filter="@f" class="btn @(ViewBag.Filter==f?"btn-primary":"btn-outline-primary")">@f</a>}</div><div class="card page-card"><div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Issue ID</th><th>Book</th><th>Member</th><th>Issue Date</th><th>Due Date</th><th>Return Date</th><th>Status</th><th>Fine</th></tr></thead><tbody>@foreach(var x in Model){var overdue=x.Status=="Issued"&&x.DueDate<DateTime.Today;<tr><td>#@x.Id</td><td>@x.Book.Title</td><td>@x.Member.Name</td><td>@x.IssueDate.ToString("dd MMM yyyy")</td><td>@x.DueDate.ToString("dd MMM yyyy")</td><td>@(x.BookReturn?.ReturnDate.ToString("dd MMM yyyy")??"—")</td><td><span class="badge text-bg-@(overdue?"danger":x.Status=="Issued"?"warning":"success")">@(overdue?"Overdue":x.Status)</span></td><td>BDT @(x.BookReturn?.FineAmount.ToString("N0")??"0")</td></tr>}</tbody></table></div></div>
+@model IEnumerable
+<BookIssue>
+@{ViewData["Title"]="Transactions";}
+<div class="page-heading">
+    <div>
+        <h1>
+            Transactions
+        </h1>
+        <p>
+            Complete issue and return history
+        </p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">
+    Issue Book
+    </a>
+</div>
+<div class="btn-group mb-3">
+    @foreach (var f in new[]{"All","Issued","Returned","Overdue"}) {
+        <a asp-route-filter="@f" class="btn @(ViewBag.Filter==f?"btn-primary":"btn-outline-primary")">
+        @f
+        </a>
+    }
+</div>
+<div class="card page-card">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>
+                    Issue ID
+                    </th>
+                    <th>
+                    Book
+                    </th>
+                    <th>
+                    Member
+                    </th>
+                    <th>
+                    Issue Date
+                    </th>
+                    <th>
+                    Due Date
+                    </th>
+                    <th>
+                    Return Date
+                    </th>
+                    <th>
+                    Status
+                    </th>
+                    <th>
+                    Fine
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var x in Model) {
+                    var overdue=x.Status=="Issued"&&x.DueDate
+                    <DateTime.Today;<tr>
+                    <td>
+                    #@x.Id
+                    </td>
+                    <td>
+                    @x.Book.Title
+                    </td>
+                    <td>
+                    @x.Member.Name
+                    </td>
+                    <td>
+                    @x.IssueDate.ToString("dd MMM yyyy")
+                    </td>
+                    <td>
+                    @x.DueDate.ToString("dd MMM yyyy")
+                    </td>
+                    <td>
+                    @(x.BookReturn?.ReturnDate.ToString("dd MMM yyyy")??"—")
+                    </td>
+                    <td>
+                    <span class="badge text-bg-@(overdue?"danger":x.Status=="Issued"?"warning":"success")">
+                    @(overdue?"Overdue":x.Status)
+                    </span>
+                    </td>
+                    <td>
+                    BDT @(x.BookReturn?.FineAmount.ToString("N0")??"0")
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</div>

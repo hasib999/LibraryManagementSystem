@@ -1,3 +1,90 @@
 @model DashboardViewModel
-@{ ViewData["Title"]="Dashboard"; var cards=new[]{("Total Books",Model.TotalBooks.ToString(),"bi-book","primary"),("Available Books",Model.AvailableBooks.ToString(),"bi-check-circle","success"),("Issued Books",Model.IssuedBooks.ToString(),"bi-box-arrow-up-right","warning"),("Total Members",Model.TotalMembers.ToString(),"bi-people","primary"),("Overdue Books",Model.OverdueBooks.ToString(),"bi-exclamation-triangle","danger"),("Total Fine",$"BDT {Model.TotalFine:N0}","bi-cash-coin","success")}; }
-<div class="page-heading"><div><h1>Dashboard</h1><p>Library activity at a glance</p></div></div><div class="row g-3">@foreach(var c in cards){<div class="col-6 col-xl-4"><div class="card stat-card h-100"><div class="card-body d-flex align-items-center"><div class="stat-icon text-bg-@c.Item4"><i class="bi @c.Item3"></i></div><div><div class="text-muted small">@c.Item1</div><div class="h4 mb-0 fw-bold">@c.Item2</div></div></div></div></div>}</div><div class="card page-card mt-4"><div class="card-header"><h2 class="h5 mb-0">Recent Issues</h2></div><div class="table-responsive"><table class="table mb-0"><thead><tr><th>Book</th><th>Member</th><th>Issue Date</th><th>Due Date</th><th>Status</th></tr></thead><tbody>@foreach(var x in Model.RecentIssues){<tr><td>@x.Book.Title</td><td>@x.Member.Name</td><td>@x.IssueDate.ToString("dd MMM yyyy")</td><td>@x.DueDate.ToString("dd MMM yyyy")</td><td><span class="badge text-bg-@(x.Status=="Issued"?"warning":"success")">@x.Status</span></td></tr>}</tbody></table></div></div>
+@{
+    ViewData["Title"]="Dashboard";
+    var cards=new[]{("Total Books",Model.TotalBooks.ToString(),"bi-book","primary"),("Available Books",Model.AvailableBooks.ToString(),"bi-check-circle","success"),("Issued Books",Model.IssuedBooks.ToString(),"bi-box-arrow-up-right","warning"),("Total Members",Model.TotalMembers.ToString(),"bi-people","primary"),("Overdue Books",Model.OverdueBooks.ToString(),"bi-exclamation-triangle","danger"),("Total Fine",$"BDT {Model.TotalFine:N0}","bi-cash-coin","success")};
+}
+<div class="page-heading">
+    <div>
+        <h1>
+            Dashboard
+        </h1>
+        <p>
+            Library activity at a glance
+        </p>
+    </div>
+</div>
+<div class="row g-3">
+    @foreach (var c in cards) {
+        <div class="col-6 col-xl-4">
+            <div class="card stat-card h-100">
+                <div class="card-body d-flex align-items-center">
+                    <div class="stat-icon text-bg-@c.Item4">
+                        <i class="bi @c.Item3">
+                        </i>
+                    </div>
+                    <div>
+                        <div class="text-muted small">
+                            @c.Item1
+                        </div>
+                        <div class="h4 mb-0 fw-bold">
+                            @c.Item2
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<div class="card page-card mt-4">
+    <div class="card-header">
+        <h2 class="h5 mb-0">
+            Recent Issues
+        </h2>
+    </div>
+    <div class="table-responsive">
+        <table class="table mb-0">
+            <thead>
+                <tr>
+                    <th>
+                    Book
+                    </th>
+                    <th>
+                    Member
+                    </th>
+                    <th>
+                    Issue Date
+                    </th>
+                    <th>
+                    Due Date
+                    </th>
+                    <th>
+                    Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var x in Model.RecentIssues) {
+                    <tr>
+                        <td>
+                        @x.Book.Title
+                        </td>
+                        <td>
+                        @x.Member.Name
+                        </td>
+                        <td>
+                        @x.IssueDate.ToString("dd MMM yyyy")
+                        </td>
+                        <td>
+                        @x.DueDate.ToString("dd MMM yyyy")
+                        </td>
+                        <td>
+                        <span class="badge text-bg-@(x.Status=="Issued"?"warning":"success")">
+                        @x.Status
+                        </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

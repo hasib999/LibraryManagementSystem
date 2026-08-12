@@ -5,14 +5,80 @@ namespace LMS.Data.Migrations;
 [Migration("20260812000000_InitialCreate")]
 public partial class InitialCreate : Migration
 {
- protected override void Up(MigrationBuilder migrationBuilder)
- {
-  migrationBuilder.AddColumn<string>(name:"FullName",table:"AspNetUsers",type:"nvarchar(100)",maxLength:100,nullable:false,defaultValue:"");
-  migrationBuilder.CreateTable(name:"Books",columns:table=>new{Id=table.Column<int>(type:"int",nullable:false).Annotation("SqlServer:Identity","1, 1"),ISBN=table.Column<string>(type:"nvarchar(20)",maxLength:20,nullable:false),Title=table.Column<string>(type:"nvarchar(200)",maxLength:200,nullable:false),Author=table.Column<string>(type:"nvarchar(100)",maxLength:100,nullable:false),Category=table.Column<string>(type:"nvarchar(80)",maxLength:80,nullable:false),Publisher=table.Column<string>(type:"nvarchar(100)",maxLength:100,nullable:true),PublicationYear=table.Column<int>(type:"int",nullable:false),Quantity=table.Column<int>(type:"int",nullable:false),AvailableQuantity=table.Column<int>(type:"int",nullable:false),ShelfNumber=table.Column<string>(type:"nvarchar(20)",maxLength:20,nullable:false)},constraints:table=>table.PrimaryKey("PK_Books",x=>x.Id));
-  migrationBuilder.CreateTable(name:"Members",columns:table=>new{Id=table.Column<int>(type:"int",nullable:false).Annotation("SqlServer:Identity","1, 1"),MemberCode=table.Column<string>(type:"nvarchar(20)",maxLength:20,nullable:false),Name=table.Column<string>(type:"nvarchar(120)",maxLength:120,nullable:false),Department=table.Column<string>(type:"nvarchar(120)",maxLength:120,nullable:false),Phone=table.Column<string>(type:"nvarchar(30)",maxLength:30,nullable:false),Email=table.Column<string>(type:"nvarchar(150)",maxLength:150,nullable:false),JoinDate=table.Column<DateTime>(type:"datetime2",nullable:false),IsActive=table.Column<bool>(type:"bit",nullable:false)},constraints:table=>table.PrimaryKey("PK_Members",x=>x.Id));
-  migrationBuilder.CreateTable(name:"BookIssues",columns:table=>new{Id=table.Column<int>(type:"int",nullable:false).Annotation("SqlServer:Identity","1, 1"),BookId=table.Column<int>(type:"int",nullable:false),MemberId=table.Column<int>(type:"int",nullable:false),IssueDate=table.Column<DateTime>(type:"datetime2",nullable:false),DueDate=table.Column<DateTime>(type:"datetime2",nullable:false),Status=table.Column<string>(type:"nvarchar(20)",maxLength:20,nullable:false)},constraints:table=>{table.PrimaryKey("PK_BookIssues",x=>x.Id);table.ForeignKey("FK_BookIssues_Books_BookId",x=>x.BookId,"Books","Id",onDelete:ReferentialAction.Restrict);table.ForeignKey("FK_BookIssues_Members_MemberId",x=>x.MemberId,"Members","Id",onDelete:ReferentialAction.Restrict);});
-  migrationBuilder.CreateTable(name:"BookReturns",columns:table=>new{Id=table.Column<int>(type:"int",nullable:false).Annotation("SqlServer:Identity","1, 1"),BookIssueId=table.Column<int>(type:"int",nullable:false),ReturnDate=table.Column<DateTime>(type:"datetime2",nullable:false),LateDays=table.Column<int>(type:"int",nullable:false),FineAmount=table.Column<decimal>(type:"decimal(10,2)",precision:10,scale:2,nullable:false)},constraints:table=>{table.PrimaryKey("PK_BookReturns",x=>x.Id);table.ForeignKey("FK_BookReturns_BookIssues_BookIssueId",x=>x.BookIssueId,"BookIssues","Id",onDelete:ReferentialAction.Restrict);});
-  migrationBuilder.CreateIndex("IX_Books_ISBN","Books","ISBN",unique:true);migrationBuilder.CreateIndex("IX_Members_MemberCode","Members","MemberCode",unique:true);migrationBuilder.CreateIndex("IX_BookIssues_BookId","BookIssues","BookId");migrationBuilder.CreateIndex("IX_BookIssues_MemberId","BookIssues","MemberId");migrationBuilder.CreateIndex("IX_BookReturns_BookIssueId","BookReturns","BookIssueId",unique:true);
- }
- protected override void Down(MigrationBuilder migrationBuilder){migrationBuilder.DropTable("BookReturns");migrationBuilder.DropTable("BookIssues");migrationBuilder.DropTable("Books");migrationBuilder.DropTable("Members");migrationBuilder.DropColumn("FullName","AspNetUsers");}
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.AddColumn<string>(name: "FullName", table: "AspNetUsers", type: "nvarchar(100)",
+                                           maxLength: 100, nullable: false, defaultValue: "");
+        migrationBuilder.CreateTable(
+            name: "Books",
+            columns: table =>
+                new { Id = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
+                      ISBN = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                      Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                      Author = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                      Category = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
+                      Publisher = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                      PublicationYear = table.Column<int>(type: "int", nullable: false),
+                      Quantity = table.Column<int>(type: "int", nullable: false),
+                      AvailableQuantity = table.Column<int>(type: "int", nullable: false),
+                      ShelfNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false) },
+            constraints: table => table.PrimaryKey("PK_Books", x => x.Id));
+        migrationBuilder.CreateTable(
+            name: "Members",
+            columns: table =>
+                new { Id = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
+                      MemberCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                      Name = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
+                      Department = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
+                      Phone = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                      Email = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                      JoinDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                      IsActive = table.Column<bool>(type: "bit", nullable: false) },
+            constraints: table => table.PrimaryKey("PK_Members", x => x.Id));
+        migrationBuilder.CreateTable(
+            name: "BookIssues",
+            columns: table =>
+                new { Id = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
+                      BookId = table.Column<int>(type: "int", nullable: false),
+                      MemberId = table.Column<int>(type: "int", nullable: false),
+                      IssueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                      DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                      Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false) },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_BookIssues", x => x.Id);
+                table.ForeignKey("FK_BookIssues_Books_BookId", x => x.BookId, "Books", "Id",
+                                 onDelete: ReferentialAction.Restrict);
+                table.ForeignKey("FK_BookIssues_Members_MemberId", x => x.MemberId, "Members", "Id",
+                                 onDelete: ReferentialAction.Restrict);
+            });
+        migrationBuilder.CreateTable(
+            name: "BookReturns",
+            columns: table =>
+                new { Id = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
+                      BookIssueId = table.Column<int>(type: "int", nullable: false),
+                      ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                      LateDays = table.Column<int>(type: "int", nullable: false),
+                      FineAmount =
+                          table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false) },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_BookReturns", x => x.Id);
+                table.ForeignKey("FK_BookReturns_BookIssues_BookIssueId", x => x.BookIssueId, "BookIssues", "Id",
+                                 onDelete: ReferentialAction.Restrict);
+            });
+        migrationBuilder.CreateIndex("IX_Books_ISBN", "Books", "ISBN", unique: true);
+        migrationBuilder.CreateIndex("IX_Members_MemberCode", "Members", "MemberCode", unique: true);
+        migrationBuilder.CreateIndex("IX_BookIssues_BookId", "BookIssues", "BookId");
+        migrationBuilder.CreateIndex("IX_BookIssues_MemberId", "BookIssues", "MemberId");
+        migrationBuilder.CreateIndex("IX_BookReturns_BookIssueId", "BookReturns", "BookIssueId", unique: true);
+    }
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropTable("BookReturns");
+        migrationBuilder.DropTable("BookIssues");
+        migrationBuilder.DropTable("Books");
+        migrationBuilder.DropTable("Members");
+        migrationBuilder.DropColumn("FullName", "AspNetUsers");
+    }
 }

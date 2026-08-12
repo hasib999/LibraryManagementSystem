@@ -1,2 +1,112 @@
-@model IEnumerable<Book>
-@{ViewData["Title"]="Books";}<div class="page-heading"><div><h1>Books</h1><p>Manage the library catalogue</p></div><a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Book</a></div><form class="search-bar mb-3" method="get"><div class="input-group"><input name="search" value="@ViewBag.Search" class="form-control" placeholder="Search title, ISBN, author or category"><button class="btn btn-primary"><i class="bi bi-search"></i> Search</button></div></form><div class="card page-card"><div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>ISBN</th><th>Title</th><th>Author</th><th>Category</th><th>Shelf</th><th>Quantity</th><th>Available</th><th>Status</th><th>Actions</th></tr></thead><tbody>@foreach(var x in Model){var label=x.AvailableQuantity==0?"Not Available":x.AvailableQuantity<=2?"Low Stock":"Available";var color=x.AvailableQuantity==0?"danger":x.AvailableQuantity<=2?"warning":"success";<tr><td>@x.ISBN</td><td class="fw-semibold">@x.Title</td><td>@x.Author</td><td>@x.Category</td><td>@x.ShelfNumber</td><td>@x.Quantity</td><td>@x.AvailableQuantity</td><td><span class="badge text-bg-@color">@label</span></td><td class="text-nowrap"><a asp-action="Details" asp-route-id="@x.Id" class="btn btn-sm btn-light" title="Details"><i class="bi bi-eye"></i></a> <a asp-action="Edit" asp-route-id="@x.Id" class="btn btn-sm btn-light" title="Edit"><i class="bi bi-pencil"></i></a> <a asp-action="Delete" asp-route-id="@x.Id" class="btn btn-sm btn-light text-danger" title="Delete"><i class="bi bi-trash"></i></a></td></tr>}</tbody></table></div></div>
+@model IEnumerable
+<Book>
+@{ViewData["Title"]="Books";}
+<div class="page-heading">
+    <div>
+        <h1>
+            Books
+        </h1>
+        <p>
+            Manage the library catalogue
+        </p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">
+    <i class="bi bi-plus-lg">
+    </i>
+    Add Book
+    </a>
+</div>
+<form class="search-bar mb-3" method="get">
+    <div class="input-group">
+        <input name="search" value="@ViewBag.Search" class="form-control" placeholder="Search title, ISBN, author or category">
+        <button class="btn btn-primary">
+        <i class="bi bi-search">
+        </i>
+        Search
+        </button>
+    </div>
+</form>
+<div class="card page-card">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>
+                    ISBN
+                    </th>
+                    <th>
+                    Title
+                    </th>
+                    <th>
+                    Author
+                    </th>
+                    <th>
+                    Category
+                    </th>
+                    <th>
+                    Shelf
+                    </th>
+                    <th>
+                    Quantity
+                    </th>
+                    <th>
+                    Available
+                    </th>
+                    <th>
+                    Status
+                    </th>
+                    <th>
+                    Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var x in Model) {
+                    var label=x.AvailableQuantity==0?"Not Available":x.AvailableQuantity
+                    <=2?"Low Stock":"Available";var color=x.AvailableQuantity==0?"danger":x.AvailableQuantity<=2?"warning":"success";<tr>
+                    <td>
+                    @x.ISBN
+                    </td>
+                    <td class="fw-semibold">
+                    @x.Title
+                    </td>
+                    <td>
+                    @x.Author
+                    </td>
+                    <td>
+                    @x.Category
+                    </td>
+                    <td>
+                    @x.ShelfNumber
+                    </td>
+                    <td>
+                    @x.Quantity
+                    </td>
+                    <td>
+                    @x.AvailableQuantity
+                    </td>
+                    <td>
+                    <span class="badge text-bg-@color">
+                    @label
+                    </span>
+                    </td>
+                    <td class="text-nowrap">
+                    <a asp-action="Details" asp-route-id="@x.Id" class="btn btn-sm btn-light" title="Details">
+                    <i class="bi bi-eye">
+                    </i>
+                    </a>
+                    <a asp-action="Edit" asp-route-id="@x.Id" class="btn btn-sm btn-light" title="Edit">
+                    <i class="bi bi-pencil">
+                    </i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@x.Id" class="btn btn-sm btn-light text-danger" title="Delete">
+                    <i class="bi bi-trash">
+                    </i>
+                    </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</div>
