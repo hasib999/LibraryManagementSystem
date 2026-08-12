@@ -1,7 +1,6 @@
 @using Microsoft.AspNetCore.Identity
-@inject UserManager
-<ApplicationUser>
-UserManager
+@using LMS.Models
+@inject UserManager<ApplicationUser> UserManager
 @{
     var appUser = User.Identity?.IsAuthenticated == true ? await UserManager.GetUserAsync(User) : null;
 }
