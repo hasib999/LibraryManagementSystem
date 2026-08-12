@@ -52,9 +52,10 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var x in Model) {
-                    var overdue=x.Status=="Issued"&&x.DueDate
-                    <DateTime.Today;<tr>
+                @foreach (var x in Model)
+                {
+                    var overdue = x.Status == "Issued" && x.DueDate < DateTime.Today;
+                    <tr>
                     <td>
                     #@x.Id
                     </td>
@@ -81,8 +82,8 @@
                     <td>
                     BDT @(x.BookReturn?.FineAmount.ToString("N0")??"0")
                     </td>
-                </tr>
-            }
+                    </tr>
+                }
         </tbody>
     </table>
 </div>
