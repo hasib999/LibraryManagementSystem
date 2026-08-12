@@ -1,13 +1,84 @@
-using LMS.Data; using LMS.Models; using Microsoft.AspNetCore.Mvc; using Microsoft.EntityFrameworkCore;
+using LMS.Data;
+using LMS.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 namespace LMS.Controllers;
 public class BooksController(ApplicationDbContext db) : Controller
 {
- public async Task<IActionResult> Index(string? search){var q=db.Books.AsNoTracking();if(!string.IsNullOrWhiteSpace(search)){search=search.Trim();q=q.Where(x=>x.Title.Contains(search)||x.ISBN.Contains(search)||x.Author.Contains(search)||x.Category.Contains(search));}ViewBag.Search=search;return View(await q.OrderBy(x=>x.Title).ToListAsync());}
- public async Task<IActionResult> Details(int id){var x=await db.Books.AsNoTracking().FirstOrDefaultAsync(x=>x.Id==id);return x is null?NotFound():View(x);}
- public IActionResult Create()=>View(new Book{Quantity=1,AvailableQuantity=1,PublicationYear=DateTime.Today.Year});
- [HttpPost,ValidateAntiForgeryToken] public async Task<IActionResult> Create(Book book){if(await db.Books.AnyAsync(x=>x.ISBN==book.ISBN))ModelState.AddModelError(nameof(book.ISBN),"ISBN already exists.");if(book.AvailableQuantity>book.Quantity)ModelState.AddModelError(nameof(book.AvailableQuantity),"Available quantity cannot exceed quantity.");if(!ModelState.IsValid)return View(book);db.Add(book);await db.SaveChangesAsync();TempData["Success"]="Book added successfully.";return RedirectToAction(nameof(Index));}
- public async Task<IActionResult> Edit(int id){var x=await db.Books.FindAsync(id);return x is null?NotFound():View(x);}
- [HttpPost,ValidateAntiForgeryToken] public async Task<IActionResult> Edit(int id,Book book){if(id!=book.Id)return NotFound();if(await db.Books.AnyAsync(x=>x.ISBN==book.ISBN&&x.Id!=id))ModelState.AddModelError(nameof(book.ISBN),"ISBN already exists.");var issued=await db.BookIssues.CountAsync(x=>x.BookId==id&&x.Status=="Issued");if(book.AvailableQuantity>book.Quantity||book.Quantity<issued)ModelState.AddModelError(nameof(book.Quantity),"Quantity is inconsistent with issued copies.");if(!ModelState.IsValid)return View(book);db.Update(book);await db.SaveChangesAsync();TempData["Success"]="Book updated successfully.";return RedirectToAction(nameof(Index));}
- public async Task<IActionResult> Delete(int id){var x=await db.Books.AsNoTracking().FirstOrDefaultAsync(x=>x.Id==id);return x is null?NotFound():View(x);}
- [HttpPost,ActionName("Delete"),ValidateAntiForgeryToken] public async Task<IActionResult> DeleteConfirmed(int id){var x=await db.Books.FindAsync(id);if(x is null)return NotFound();if(await db.BookIssues.AnyAsync(i=>i.BookId==id)){TempData["Error"]="Unable to delete this book because transaction history exists.";return RedirectToAction(nameof(Index));}db.Remove(x);await db.SaveChangesAsync();TempData["Success"]="Book deleted successfully.";return RedirectToAction(nameof(Index));}
+    public async Task<IActionResult> Index(string? search)
+    {
+        var q = db.Books.AsNoTracking();
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            search = search.Trim();
+            q = q.Where(x => x.Title.Contains(search) || x.ISBN.Contains(search) || x.Author.Contains(search) ||
+                             x.Category.Contains(search));
+        }
+        ViewBag.Search = search;
+        return View(await q.OrderBy(x => x.Title).ToListAsync());
+    }
+    public async Task<IActionResult> Details(int id)
+    {
+        var x = await db.Books.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        return x is null ? NotFound() : View(x);
+    }
+    public IActionResult Create() => View(new Book { Quantity = 1, AvailableQuantity = 1,
+                                                     PublicationYear = DateTime.Today.Year });
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(Book book)
+    {
+        if (await db.Books.AnyAsync(x => x.ISBN == book.ISBN))
+            ModelState.AddModelError(nameof(book.ISBN), "ISBN already exists.");
+        if (book.AvailableQuantity > book.Quantity)
+            ModelState.AddModelError(nameof(book.AvailableQuantity), "Available quantity cannot exceed quantity.");
+        if (!ModelState.IsValid)
+            return View(book);
+        db.Add(book);
+        await db.SaveChangesAsync();
+        TempData["Success"] = "Book added successfully.";
+        return RedirectToAction(nameof(Index));
+    }
+    public async Task<IActionResult> Edit(int id)
+    {
+        var x = await db.Books.FindAsync(id);
+        return x is null ? NotFound() : View(x);
+    }
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, Book book)
+    {
+        if (id != book.Id)
+            return NotFound();
+        if (await db.Books.AnyAsync(x => x.ISBN == book.ISBN && x.Id != id))
+            ModelState.AddModelError(nameof(book.ISBN), "ISBN already exists.");
+        var issued = await db.BookIssues.CountAsync(x => x.BookId == id && x.Status == "Issued");
+        if (book.AvailableQuantity > book.Quantity || book.Quantity < issued)
+            ModelState.AddModelError(nameof(book.Quantity), "Quantity is inconsistent with issued copies.");
+        if (!ModelState.IsValid)
+            return View(book);
+        db.Update(book);
+        await db.SaveChangesAsync();
+        TempData["Success"] = "Book updated successfully.";
+        return RedirectToAction(nameof(Index));
+    }
+    public async Task<IActionResult> Delete(int id)
+    {
+        var x = await db.Books.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        return x is null ? NotFound() : View(x);
+    }
+    [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var x = await db.Books.FindAsync(id);
+        if (x is null)
+            return NotFound();
+        if (await db.BookIssues.AnyAsync(i => i.BookId == id))
+        {
+            TempData["Error"] = "Unable to delete this book because transaction history exists.";
+            return RedirectToAction(nameof(Index));
+        }
+        db.Remove(x);
+        await db.SaveChangesAsync();
+        TempData["Success"] = "Book deleted successfully.";
+        return RedirectToAction(nameof(Index));
+    }
 }

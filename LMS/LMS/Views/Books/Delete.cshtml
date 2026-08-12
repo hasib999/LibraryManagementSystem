@@ -1,2 +1,26 @@
 @model Book
-@{ViewData["Title"]="Delete Book";}<div class="page-heading"><h1>Delete Book</h1></div><div class="card page-card"><div class="card-body"><h2 class="h5">Delete “@Model.Title”?</h2><p class="text-muted">This cannot be undone. Books with transaction history cannot be deleted.</p><form method="post"><input type="hidden" asp-for="Id"><button class="btn btn-danger">Confirm Delete</button> <a asp-action="Index" class="btn btn-light">Cancel</a></form></div></div>
+@{ViewData["Title"]="Delete Book";}
+<div class="page-heading">
+    <h1>
+        Delete Book
+    </h1>
+</div>
+<div class="card page-card">
+    <div class="card-body">
+        <h2 class="h5">
+            Delete “@Model.Title”?
+        </h2>
+        <p class="text-muted">
+            This cannot be undone. Books with transaction history cannot be deleted.
+        </p>
+        <form method="post">
+            <input type="hidden" asp-for="Id">
+            <button class="btn btn-danger">
+            Confirm Delete
+            </button>
+            <a asp-action="Index" class="btn btn-light">
+            Cancel
+            </a>
+        </form>
+    </div>
+</div>

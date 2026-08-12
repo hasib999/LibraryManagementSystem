@@ -2,18 +2,22 @@
 @{
     ViewData["Title"] = "Reports";
 }
-
 <div class="page-heading">
     <div>
-        <h1>Reports</h1>
-        <p>Simple library summaries</p>
+        <h1>
+            Reports
+        </h1>
+        <p>
+            Simple library summaries
+        </p>
     </div>
 </div>
-
 <div class="alert alert-primary">
-    <strong>Fine Collection:</strong> BDT @Model.FineCollection.ToString("N2")
+    <strong>
+    Fine Collection:
+    </strong>
+    BDT @Model.FineCollection.ToString("N2")
 </div>
-
 @{
     var reportSections = new[]
     {
@@ -22,35 +26,60 @@
         ("Returned Books", Model.Returned)
     };
 }
-
-@foreach(var item in reportSections)
+@foreach (var item in reportSections)
 {
     <div class="card page-card mb-4">
         <div class="card-header">
-            <h2 class="h5 mb-0">@item.Item1</h2>
+            <h2 class="h5 mb-0">
+                @item.Item1
+            </h2>
         </div>
         <div class="table-responsive">
             <table class="table mb-0">
                 <thead>
                     <tr>
-                        <th>Book</th>
-                        <th>Member</th>
-                        <th>Issue</th>
-                        <th>Due</th>
-                        <th>Return</th>
-                        <th>Fine</th>
+                        <th>
+                        Book
+                        </th>
+                        <th>
+                        Member
+                        </th>
+                        <th>
+                        Issue
+                        </th>
+                        <th>
+                        Due
+                        </th>
+                        <th>
+                        Return
+                        </th>
+                        <th>
+                        Fine
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(var x in item.Item2)
+                    @foreach (var x in item.Item2)
                     {
                         <tr>
-                            <td>@x.Book.Title</td>
-                            <td>@x.Member.Name</td>
-                            <td>@x.IssueDate.ToString("dd MMM yyyy")</td>
-                            <td>@x.DueDate.ToString("dd MMM yyyy")</td>
-                            <td>@(x.BookReturn?.ReturnDate.ToString("dd MMM yyyy") ?? "—")</td>
-                            <td>BDT @(x.BookReturn?.FineAmount.ToString("N0") ?? "0")</td>
+                            <td>
+                            @x.Book.Title
+                            </td>
+                            <td>
+                            @x.Member.Name
+                            </td>
+                            <td>
+                            @x.IssueDate.ToString("dd MMM yyyy")
+                            </td>
+                            <td>
+                            @x.DueDate.ToString("dd MMM yyyy")
+                            </td>
+                            <td>
+                            @(x.BookReturn?.ReturnDate.ToString("dd MMM yyyy") ?? "—")
+                            </td>
+                            <td>
+                            BDT @(x.BookReturn?.FineAmount.ToString("N0") ?? "0")
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -58,28 +87,41 @@
         </div>
     </div>
 }
-
 <div class="row g-4">
     <div class="col-lg-6">
         <div class="card page-card">
             <div class="card-header">
-                <h2 class="h5 mb-0">Books by Category</h2>
+                <h2 class="h5 mb-0">
+                    Books by Category
+                </h2>
             </div>
             <table class="table mb-0">
                 <thead>
                     <tr>
-                        <th>Category</th>
-                        <th>Titles</th>
-                        <th>Copies</th>
+                        <th>
+                        Category
+                        </th>
+                        <th>
+                        Titles
+                        </th>
+                        <th>
+                        Copies
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(var x in Model.BooksByCategory)
+                    @foreach (var x in Model.BooksByCategory)
                     {
                         <tr>
-                            <td>@x.Category</td>
-                            <td>@x.Titles</td>
-                            <td>@x.Copies</td>
+                            <td>
+                            @x.Category
+                            </td>
+                            <td>
+                            @x.Titles
+                            </td>
+                            <td>
+                            @x.Copies
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -89,24 +131,38 @@
     <div class="col-lg-6">
         <div class="card page-card">
             <div class="card-header">
-                <h2 class="h5 mb-0">Member Borrowing History</h2>
+                <h2 class="h5 mb-0">
+                    Member Borrowing History
+                </h2>
             </div>
             <div class="table-responsive">
                 <table class="table mb-0">
                     <thead>
                         <tr>
-                            <th>Member</th>
-                            <th>Borrowed</th>
-                            <th>Returned</th>
+                            <th>
+                            Member
+                            </th>
+                            <th>
+                            Borrowed
+                            </th>
+                            <th>
+                            Returned
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach(var x in Model.MemberHistory)
+                        @foreach (var x in Model.MemberHistory)
                         {
                             <tr>
-                                <td>@x.MemberCode — @x.MemberName</td>
-                                <td>@x.Borrowed</td>
-                                <td>@x.Returned</td>
+                                <td>
+                                @x.MemberCode — @x.MemberName
+                                </td>
+                                <td>
+                                @x.Borrowed
+                                </td>
+                                <td>
+                                @x.Returned
+                                </td>
                             </tr>
                         }
                     </tbody>
